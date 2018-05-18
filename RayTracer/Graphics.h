@@ -21,6 +21,13 @@
 
 #include <fstream>
 
+namespace Graphics
+{
+	void DrawLine(Line*, Matrix4fx4f&, Color**);
+}
+
+// Drawing methods
+
 namespace ParallelRayTracer
 {
 	void Run();
