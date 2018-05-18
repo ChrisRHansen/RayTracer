@@ -12,8 +12,23 @@ void OrthographicViewing::Run()
 	int far = -30;
 
 	Line* lines[] = {
-		//new Line(Position3f(-100.0f, 0.0f, -18.0f), Position3f(100.0f, 0.0f, -18.0f))
-		new Line(Position3f(0.0f, 0.0f, -18.0f), Position3f(0.0f, 0.0f, -18.0f))
+		// Fore-square
+		new Line(Position3f(-50.0f, -50.0f, -18.0f), Position3f(-50.0f, 50.0f, -18.0f))
+		, new Line(Position3f(-50.0f, 50.0f, -18.0f), Position3f(50.0f, 50.0f, -18.0f))
+		, new Line(Position3f(50.0f, -50.0f, -18.0f), Position3f(50.0f, 50.0f, -18.0f))
+		, new Line(Position3f(-50.0f, -50.0f, -18.0f), Position3f(50.0f, -50.0f, -18.0f))
+
+		// Rear-square
+		, new Line(Position3f(-20.0f, -20.0f, -36.0f), Position3f(-20.0f, 80.0f, -36.0f))
+		, new Line(Position3f(-20.0f, 80.0f, -36.0f), Position3f(80.0f, 80.0f, -36.0f))
+		, new Line(Position3f(80.0f, -20.0f, -36.0f), Position3f(80.0f, 80.0f, -36.0f))
+		, new Line(Position3f(-20.0f, -20.0f, -36.0f), Position3f(80.0f, -20.0f, -36.0f))
+
+		// Connecting lines
+		, new Line(Position3f(-50.0f, -50.0f, -18.0f), Position3f(-20.0f, -20.0f, -36.0f))
+		, new Line(Position3f(-50.0f, 50.0f, -18.0f), Position3f(-20.0f, 80.0f, -36.0f))
+		, new Line(Position3f(50.0f, -50.0f, -18.0f), Position3f(80.0f, -20.0f, -36.0f))
+		, new Line(Position3f(-50.0f, -50.0f, -18.0f), Position3f(-20.0f, -20.0f, -36.0f))
 	};
 
 	Color **image = new Color*[numPixY];
@@ -36,16 +51,14 @@ void OrthographicViewing::Run()
 	Matrix4fx4f Morth = Matrix4fx4f(Morth_Values);														 //
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Matrix4fx4f M = Mvp * Morth;
+	////// Transformation Matrix //
+	Matrix4fx4f M = Mvp * Morth; //
+	///////////////////////////////
 
 	// Main Loop
 	for (Line* l : lines)
 	{
-		Position3f p = M * l->head;
-		Position3f q = M * l->tail;
-				
-		image[(int)p.x][(int)p.y] = Color(255, 255, 255);
-		image[(int)q.x][(int)q.y] = Color(255, 255, 255);
+		Graphics::DrawLine(l, M, image);
 	}
 
 	SaveBitmap(numPixX, numPixY, &image);
